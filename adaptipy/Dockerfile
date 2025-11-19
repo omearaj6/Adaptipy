@@ -26,8 +26,5 @@ COPY . .
 # Collect static files (Django)
 RUN python manage.py collectstatic --noinput
 
-# Expose port 8000
-EXPOSE 8000
-
 # Run the application
 CMD gunicorn adaptipy.wsgi:application --bind 0.0.0.0:$PORT
