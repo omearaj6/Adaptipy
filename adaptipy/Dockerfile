@@ -26,7 +26,16 @@ COPY . .
 # Collect static files (Django)
 RUN python manage.py collectstatic --noinput
 
+
 EXPOSE 8000
 
 # Run the application
-CMD gunicorn adaptipy.wsgi:application --bind 0.0.0.0:$PORT
+CMD echo "=== STARTING APP ===" && \
+    echo "PORT: $PORT" && \
+    echo "SECRET_KEY: $SECRET_KEY" && \
+    echo "DEBUG: $DEBUG" && \
+    python manage.py check && \
+    echo "=== CHECK PASSED ===" && \
+    python manage.py migrate && \
+    echo "=== MIGRATIONS COMPLETE ===" && \
+    gunicorn adaptipy.wsgi:application --bind 0.0.0.0:$PORT --access-logfile - --log-level debug
